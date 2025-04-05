@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -18,11 +18,13 @@ win32 {
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
+    multicast_manager.cpp \
     multicast_receiver.cpp \
     multicast_sender.cpp
 
 HEADERS += \
     mainwindow.h \
+    multicast_manager.h \
     multicast_receiver.h \
     multicast_sender.h
 

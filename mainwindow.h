@@ -1,8 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-#include "multicast_receiver.h"
-#include "multicast_sender.h"
+
 #include <QMainWindow>
+#include "multicast_manager.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -17,14 +17,14 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+private slots:
     void onMessageReceived(const QString& message);
     void onSendButtonClicked();
 
 private:
     Ui::MainWindow *ui;
-    MulticastReceiver *multicastReceiver;
-    MulticastSender* multicastSender;
-    QThread *receiverThread;
-
+    MulticastManager *multicastManager;
 };
+
 #endif // MAINWINDOW_H
