@@ -31,7 +31,18 @@ HEADERS += \
 FORMS += \
     mainwindow.ui
 
-INCLUDEPATH += C:/msys64/home/halil/asio/include  # ASIO başlık dosyalarının bulunduğu dizin
+# ASIO(non-boost)
+INCLUDEPATH += C:/msys64/home/halil/asio/include
+
+# PortAudio
+INCLUDEPATH += C:/msys64/home/halil/portaudio/include
+DEPENDPATH += C:/msys64/home/halil/portaudio/include
+LIBS += -L"C:/msys64/home/halil/portaudio/build" -lportaudio
+
+# Opus
+INCLUDEPATH += C:/msys64/home/halil/opus-1.5.2/include
+LIBS += -L"C:/msys64/home/halil/opus-1.5.2/build" -lopus
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
