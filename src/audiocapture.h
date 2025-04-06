@@ -14,11 +14,15 @@ public:
     AudioCapture(QObject *parent = nullptr);
     ~AudioCapture();
 
+signals:
+    void saveRequested();
+
 public slots:
     void startCapture();
     void stopCapture();
     std::vector<char> getCapturedData();
     bool saveToWav(const QString& filename);
+
 
 private:
     PaStream *stream;                  // Ses akışını yöneten PortAudio stream

@@ -56,10 +56,27 @@ void AudioCapture::startCapture() {
     }
 }
 
+int AudioCapture::audioCallback(const void* inputBuffer, void* outputBuffer,
+                                unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo* timeInfo,
+                                PaStreamCallbackFlags statusFlags, void* userData) {
+    // Ses verisi yakalandığında bu callback fonksiyonu çağrılır
+
+    AudioCapture* audioCapture = static_cast<AudioCapture*>(userData);
+    const short* input = static_cast<const short*>(inputBuffer);
+    std::vector<char> data(reinterpret_cast<const char*>(input), reinterpret_cast<const char*>(input + framesPerBuffer));
+
+    // Veriyi saklıyoruz
+    audioCapture->capturedData.insert(audioCapture->capturedData.end(), data.begin(), data.end());
+
+    return paContinue;
+}
+
 void AudioCapture::stopCapture() {
     // Ses yakalamayı durduruyoruz
     Pa_StopStream(stream);
     Pa_CloseStream(stream);
+
+    emit saveRequested(); // Kapatırsak programı sesi yine de klasöre kaydetsin .
 }
 
 std::vector<char> AudioCapture::getCapturedData() {
@@ -114,17 +131,4 @@ bool AudioCapture::saveToWav(const QString& filename) {
     return true;
 }
 
-int AudioCapture::audioCallback(const void* inputBuffer, void* outputBuffer,
-    unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo* timeInfo,
-    PaStreamCallbackFlags statusFlags, void* userData) {
-    // Ses verisi yakalandığında bu callback fonksiyonu çağrılır
 
-    AudioCapture* audioCapture = static_cast<AudioCapture*>(userData);
-    const short* input = static_cast<const short*>(inputBuffer);
-    std::vector<char> data(reinterpret_cast<const char*>(input), reinterpret_cast<const char*>(input + framesPerBuffer));
-
-    // Veriyi saklıyoruz
-    audioCapture->capturedData.insert(audioCapture->capturedData.end(), data.begin(), data.end());
-
-    return paContinue;
-}

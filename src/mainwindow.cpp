@@ -22,6 +22,9 @@ MainWindow::MainWindow(QWidget* parent)
     
     // Save butonuna bağlantı ekle
     connect(ui->saveButton, &QPushButton::clicked, this, &MainWindow::onSaveButtonClicked);
+    
+    // Connect the saveRequested signal from AudioCapture
+    connect(audioCapture, &AudioCapture::saveRequested, this, &MainWindow::onSaveButtonClicked);
 }
 
 MainWindow::~MainWindow()
