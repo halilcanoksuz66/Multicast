@@ -20,6 +20,10 @@ MulticastManager::MulticastManager(QObject *parent)
     // Senderi başlat
     multicastSender = new MulticastSender();
     emit messageReceived("Multicast gönderici başlatıldı");
+
+    // Audio codec'i başlat
+    audioCodec = new AudioCodec(this);
+    emit messageReceived("Ses codec'i başlatıldı");
 }
 
 MulticastManager::~MulticastManager()
@@ -29,16 +33,24 @@ MulticastManager::~MulticastManager()
 
     delete multicastReceiver;
     delete multicastSender;
+    delete audioCodec;
     emit messageReceived("Multicast bağlantıları kapatıldı");
 }
 
 void MulticastManager::sendAudio(std::vector<char> capturedData) {
-    multicastSender->sendAudio(capturedData);
-    emit messageReceived(QString("Ses verisi gönderildi (%1 byte)").arg(capturedData.size()));
+    // Ses verisini sıkıştır
+    std::vector<char> compressedData = audioCodec->compress(capturedData);
+    
+    // Sıkıştırılmış veriyi gönder
+    multicastSender->sendAudio(compressedData);
+    emit messageReceived(QString("Sıkıştırılmış ses verisi gönderildi (%1 byte)").arg(compressedData.size()));
 }
 
 void MulticastManager::onAudioCaptured(std::vector<char> data) {
     // Ses verisini multicast ile gönder
     sendAudio(data);
+    
+    // Loglama
+    qDebug() << "Ses verisi gönderildi, boyut:" << data.size() << "byte";
 }
 

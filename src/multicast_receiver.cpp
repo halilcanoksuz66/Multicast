@@ -32,22 +32,16 @@ void MulticastReceiver::receive() {
 
 void MulticastReceiver::handleReceive(const asio::error_code &error, std::size_t bytes_received) {
     if (!error) {
-        // Alınan ses verisini işle
         std::vector<char> receivedData(receive_buffer.begin(), receive_buffer.begin() + bytes_received);
         
-        // Debug mesajı
         qDebug() << "Alınan ses verisi boyutu:" << receivedData.size() << "byte";
         
-        // Ses verisini işlemek için bir sinyal yayınla
         emit audioReceived(receivedData);
         
-        // Bir sonraki veriyi almak için receive metodunu tekrar çağır
         receive();
     } else {
-        // Hata durumunda loglama yap
         qDebug() << "Multicast alım hatası:" << QString::fromStdString(error.message());
         
-        // Hata durumunda da tekrar dinlemeye devam et
         receive();
     }
 }

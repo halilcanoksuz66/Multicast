@@ -21,14 +21,16 @@ SOURCES += \
     mainwindow.cpp \
     multicast_manager.cpp \
     multicast_receiver.cpp \
-    multicast_sender.cpp
+    multicast_sender.cpp \
+    audio_codec.cpp
 
 HEADERS += \
     audiocapture.h \
     mainwindow.h \
     multicast_manager.h \
     multicast_receiver.h \
-    multicast_sender.h
+    multicast_sender.h \
+    audio_codec.h
 
 FORMS += \
     mainwindow.ui
@@ -44,7 +46,6 @@ LIBS += -L"C:/msys64/home/halil/portaudio/build" -lportaudio
 # Opus
 INCLUDEPATH += C:/msys64/home/halil/opus-1.5.2/include
 LIBS += -L"C:/msys64/home/halil/opus-1.5.2/build" -lopus
-
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

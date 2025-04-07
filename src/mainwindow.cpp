@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
     , audioCapture(new AudioCapture(this))
     , multicastManager(new MulticastManager(this))
+    , audioCodec(new AudioCodec(this))
 {
     ui->setupUi(this);
 
@@ -45,16 +46,12 @@ void MainWindow::onStopButtonClicked()
 
 void MainWindow::onSaveRequested()
 {
-    QString fileName = QFileDialog::getSaveFileName(this,
-        tr("Save Audio File"), "",
-        tr("WAV Files (*.wav);;All Files (*)"));
-
-    if (!fileName.isEmpty()) {
-        if (audioCapture->saveToWav(fileName.toUtf8().constData())) {
-            ui->statusBar->showMessage(tr("Audio saved successfully to: %1").arg(fileName));
-        } else {
-            ui->statusBar->showMessage(tr("Failed to save audio file!"));
-        }
+    QString filename = QFileDialog::getSaveFileName(this,
+        "Ses Dosyasını Kaydet", "",
+        "WAV Dosyaları (*.wav);;Tüm Dosyalar (*)");
+    
+    if (!filename.isEmpty()) {
+        audioCapture->saveToWav(filename);
     }
 }
 
@@ -62,12 +59,17 @@ void MainWindow::onAudioReceived(std::vector<char> data)
 {
     // Alınan ses verisini işle
     qDebug() << "Ses verisi alındı, boyut:" << data.size() << "byte";
-
-    // TODO: Alınan ses verisini çal
+    
+    // Sıkıştırılmış veriyi çöz
+    std::vector<char> decompressedData = audioCodec->decompress(data);
+    
+    // Çözülmüş veriyi çal
+    if (audioCapture) {
+       // audioCapture->playAudio(decompressedData);
+    }
 }
 
 void MainWindow::onMessageReceived(const QString &message)
 {
     ui->statusBar->showMessage(message);
-
 }

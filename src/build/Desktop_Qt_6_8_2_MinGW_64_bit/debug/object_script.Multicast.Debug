@@ -4,8 +4,10 @@ debug/mainwindow.o
 debug/multicast_manager.o
 debug/multicast_receiver.o
 debug/multicast_sender.o
+debug/audio_codec.o
 debug/moc_audiocapture.o
 debug/moc_mainwindow.o
 debug/moc_multicast_manager.o
 debug/moc_multicast_receiver.o
 debug/moc_multicast_sender.o
+debug/moc_audio_codec.o

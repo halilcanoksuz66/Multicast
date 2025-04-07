@@ -3,6 +3,7 @@
 
 #include "multicast_receiver.h"
 #include "multicast_sender.h"
+#include "audio_codec.h"
 #include <QObject>
 #include <QThread>
 
@@ -25,6 +26,7 @@ public slots:
 private:
     MulticastReceiver *multicastReceiver;
     MulticastSender* multicastSender;
+    AudioCodec* audioCodec;
     QThread *receiverThread;
 };
 
