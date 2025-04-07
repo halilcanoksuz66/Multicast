@@ -23,16 +23,31 @@ void MulticastReceiver::start() {
 
 void MulticastReceiver::receive() {
     socket.async_receive_from(
-        asio::buffer(data, max_length), sender_endpoint,
+        asio::buffer(receive_buffer),
+        sender_endpoint,
         [this](const asio::error_code &error, std::size_t bytes_received) {
-            handleReceive(error, bytes_received);
+            this->handleReceive(error, bytes_received);
         });
 }
 
 void MulticastReceiver::handleReceive(const asio::error_code &error, std::size_t bytes_received) {
     if (!error) {
-        QString message = QString::fromStdString(std::string(data, bytes_received));
-        emit messageReceived(message);
-        receive();  // sürekli dinlemeye devam et
+        // Alınan ses verisini işle
+        std::vector<char> receivedData(receive_buffer.begin(), receive_buffer.begin() + bytes_received);
+        
+        // Debug mesajı
+        qDebug() << "Alınan ses verisi boyutu:" << receivedData.size() << "byte";
+        
+        // Ses verisini işlemek için bir sinyal yayınla
+        emit audioReceived(receivedData);
+        
+        // Bir sonraki veriyi almak için receive metodunu tekrar çağır
+        receive();
+    } else {
+        // Hata durumunda loglama yap
+        qDebug() << "Multicast alım hatası:" << QString::fromStdString(error.message());
+        
+        // Hata durumunda da tekrar dinlemeye devam et
+        receive();
     }
 }

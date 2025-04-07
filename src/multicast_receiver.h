@@ -4,6 +4,7 @@
 #include <QObject>
 #include <asio.hpp>
 #include <QString>
+#include <QDebug>
 
 using asio::ip::udp;
 
@@ -15,7 +16,7 @@ public:
     void start();
 
 signals:
-    void messageReceived(const QString &message);
+    void audioReceived(std::vector<char> data);
 
 private:
     void receive();
@@ -24,8 +25,8 @@ private:
     asio::io_context io_context;
     udp::socket socket;
     udp::endpoint sender_endpoint;
-    enum { max_length = 1024 };
-    char data[max_length];
+    std::vector<char> receive_buffer{std::vector<char>(1024)}; // 1024 byte'lık buffer
+
 };
 
 #endif // MULTICASTRECEIVER_H

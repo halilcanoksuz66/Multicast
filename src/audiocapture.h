@@ -16,6 +16,7 @@ public:
 
 signals:
     void saveRequested();
+    void audioCaptured(std::vector<char> data);
 
 public slots:
     void startCapture();

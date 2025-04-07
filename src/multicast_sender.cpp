@@ -1,20 +1,42 @@
 #include "multicast_sender.h"
-#include <asio/ip/multicast.hpp>
+#include <QDebug>
 
-const std::string MULTICAST_ADDRESS = "239.255.0.1";
-const short PORT = 12345;
-
-
-MulticastSender::MulticastSender() : socket(io_context) {
-    socket.open(udp::v4());
-    socket.set_option(udp::socket::reuse_address(true));
+MulticastSender::MulticastSender(QObject *parent)
+    : QObject(parent)
+    , socket(io_context)
+    , multicast_address("239.255.0.1")
+    , multicast_port(12345)
+{
+    try {
+        socket.open(udp::v4());
+        endpoint = udp::endpoint(
+            asio::ip::address::from_string(multicast_address),
+            multicast_port
+        );
+    } catch (const std::exception& e) {
+        qDebug() << "MulticastSender başlatma hatası:" << e.what();
+    }
 }
 
-void MulticastSender::sendMessage(const QString &message) {
-    udp::endpoint endpoint(asio::ip::address::from_string(MULTICAST_ADDRESS), PORT);
-    socket.send_to(asio::buffer(message.toStdString()), endpoint);
+MulticastSender::~MulticastSender()
+{
+    if (socket.is_open()) {
+        socket.close();
+    }
 }
 
-void MulticastSender::start() {
-    io_context.run();
+void MulticastSender::sendAudio(std::vector<char> audioData)
+{
+    try {
+        if (!socket.is_open()) {
+            qDebug() << "Socket kapalı, yeniden açılıyor...";
+            socket.open(udp::v4());
+        }
+
+        qDebug() << "Gönderilen ses verisi boyutu:" << audioData.size() << "byte";
+
+        socket.send_to(asio::buffer(audioData), endpoint);
+    } catch (const std::exception& e) {
+        qDebug() << "Ses verisi gönderme hatası:" << e.what();
+    }
 }

@@ -11,12 +11,11 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTextEdit>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -25,14 +24,11 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralwidget;
-    QTextEdit *messageDisplay;
-    QPushButton *sendButton;
-    QLineEdit *messageInput;
+    QVBoxLayout *verticalLayout;
     QPushButton *startButton;
+    QTextEdit *status;
     QPushButton *stopButton;
-    QPushButton *saveButton;
-    QMenuBar *menubar;
-    QStatusBar *statusbar;
+    QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -41,33 +37,28 @@ public:
         MainWindow->resize(800, 600);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
-        messageDisplay = new QTextEdit(centralwidget);
-        messageDisplay->setObjectName("messageDisplay");
-        messageDisplay->setGeometry(QRect(130, 30, 511, 141));
-        messageDisplay->setReadOnly(true);
-        sendButton = new QPushButton(centralwidget);
-        sendButton->setObjectName("sendButton");
-        sendButton->setGeometry(QRect(280, 280, 161, 41));
-        messageInput = new QLineEdit(centralwidget);
-        messageInput->setObjectName("messageInput");
-        messageInput->setGeometry(QRect(260, 200, 201, 51));
+        verticalLayout = new QVBoxLayout(centralwidget);
+        verticalLayout->setObjectName("verticalLayout");
         startButton = new QPushButton(centralwidget);
         startButton->setObjectName("startButton");
-        startButton->setGeometry(QRect(200, 400, 131, 51));
+
+        verticalLayout->addWidget(startButton);
+
+        status = new QTextEdit(centralwidget);
+        status->setObjectName("status");
+        status->setEnabled(false);
+
+        verticalLayout->addWidget(status);
+
         stopButton = new QPushButton(centralwidget);
         stopButton->setObjectName("stopButton");
-        stopButton->setGeometry(QRect(340, 400, 131, 51));
-        saveButton = new QPushButton(centralwidget);
-        saveButton->setObjectName("saveButton");
-        saveButton->setGeometry(QRect(480, 400, 131, 51));
+
+        verticalLayout->addWidget(stopButton);
+
         MainWindow->setCentralWidget(centralwidget);
-        menubar = new QMenuBar(MainWindow);
-        menubar->setObjectName("menubar");
-        menubar->setGeometry(QRect(0, 0, 800, 25));
-        MainWindow->setMenuBar(menubar);
-        statusbar = new QStatusBar(MainWindow);
-        statusbar->setObjectName("statusbar");
-        MainWindow->setStatusBar(statusbar);
+        statusBar = new QStatusBar(MainWindow);
+        statusBar->setObjectName("statusBar");
+        MainWindow->setStatusBar(statusBar);
 
         retranslateUi(MainWindow);
 
@@ -76,11 +67,9 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
-        sendButton->setText(QCoreApplication::translate("MainWindow", "G\303\266nder", nullptr));
+        MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "Multicast Audio", nullptr));
         startButton->setText(QCoreApplication::translate("MainWindow", "Start", nullptr));
         stopButton->setText(QCoreApplication::translate("MainWindow", "Stop", nullptr));
-        saveButton->setText(QCoreApplication::translate("MainWindow", "Save", nullptr));
     } // retranslateUi
 
 };

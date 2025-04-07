@@ -68,6 +68,9 @@ int AudioCapture::audioCallback(const void* inputBuffer, void* outputBuffer,
     // Veriyi saklıyoruz
     audioCapture->capturedData.insert(audioCapture->capturedData.end(), data.begin(), data.end());
 
+    // Ses verisi yakalandı sinyalini yayınla
+    emit audioCapture->audioCaptured(data);
+
     return paContinue;
 }
 
@@ -89,9 +92,9 @@ bool AudioCapture::saveToWav(const QString& filename) {
         return false;
     }
 
-    std::ofstream outFile(filename.toStdString(), std::ios::binary);
+    std::ofstream outFile(filename.toUtf8().constData(), std::ios::binary);
     if (!outFile) {
-        std::cerr << "Dosya açılamadı: " << filename.toStdString() << std::endl;
+        std::cerr << "Dosya açılamadı: " << filename.toUtf8().constData() << std::endl;
         return false;
     }
 

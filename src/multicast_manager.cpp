@@ -1,4 +1,5 @@
 #include "multicast_manager.h"
+#include <QDebug>
 
 MulticastManager::MulticastManager(QObject *parent)
     : QObject(parent)
@@ -9,12 +10,16 @@ MulticastManager::MulticastManager(QObject *parent)
     multicastReceiver->moveToThread(receiverThread);
 
     connect(receiverThread, &QThread::started, multicastReceiver, &MulticastReceiver::start);
-    connect(multicastReceiver, &MulticastReceiver::messageReceived, this, &MulticastManager::messageReceived);
+    
+    // Alınan ses verilerini işlemek için bağlantı kur
+    connect(multicastReceiver, &MulticastReceiver::audioReceived, this, &MulticastManager::audioReceived);
 
     receiverThread->start();
+    emit messageReceived("Multicast alıcı başlatıldı");
 
     // Senderi başlat
     multicastSender = new MulticastSender();
+    emit messageReceived("Multicast gönderici başlatıldı");
 }
 
 MulticastManager::~MulticastManager()
@@ -24,9 +29,16 @@ MulticastManager::~MulticastManager()
 
     delete multicastReceiver;
     delete multicastSender;
+    emit messageReceived("Multicast bağlantıları kapatıldı");
 }
 
-void MulticastManager::sendMessage(const QString& message)
-{
-    multicastSender->sendMessage(message);
-} 
+void MulticastManager::sendAudio(std::vector<char> capturedData) {
+    multicastSender->sendAudio(capturedData);
+    emit messageReceived(QString("Ses verisi gönderildi (%1 byte)").arg(capturedData.size()));
+}
+
+void MulticastManager::onAudioCaptured(std::vector<char> data) {
+    // Ses verisini multicast ile gönder
+    sendAudio(data);
+}
+

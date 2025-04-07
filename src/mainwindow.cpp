@@ -1,63 +1,73 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "audiocapture.h"
-#include <QDateTime>
-#include <QDir>
+#include <QDebug>
+#include <QFileDialog>
 
-MainWindow::MainWindow(QWidget* parent)
+MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , audioCapture(new AudioCapture())
+    , audioCapture(new AudioCapture(this))
+    , multicastManager(new MulticastManager(this))
 {
     ui->setupUi(this);
 
-    // MulticastManager'ı başlat
-    multicastManager = new MulticastManager(this);
-    connect(multicastManager, &MulticastManager::messageReceived, this, &MainWindow::onMessageReceived);
-    connect(ui->sendButton, &QPushButton::clicked, this, &MainWindow::onSendButtonClicked);
+    // UI bağlantıları
+    connect(ui->startButton, &QPushButton::clicked, this, &MainWindow::onStartButtonClicked);
+    connect(ui->stopButton, &QPushButton::clicked, this, &MainWindow::onStopButtonClicked);
 
-    // Start ve Stop butonlarına bağlantı ekle
-    connect(ui->startButton, &QPushButton::clicked, audioCapture, &AudioCapture::startCapture);
-    connect(ui->stopButton, &QPushButton::clicked, audioCapture, &AudioCapture::stopCapture);
-    
-    // Save butonuna bağlantı ekle
-    connect(ui->saveButton, &QPushButton::clicked, this, &MainWindow::onSaveButtonClicked);
-    
-    // Connect the saveRequested signal from AudioCapture
-    connect(audioCapture, &AudioCapture::saveRequested, this, &MainWindow::onSaveButtonClicked);
+    // AudioCapture bağlantıları
+    connect(audioCapture, &AudioCapture::audioCaptured, multicastManager, &MulticastManager::onAudioCaptured);
+    connect(audioCapture, &AudioCapture::saveRequested, this, &MainWindow::onSaveRequested);
+
+    // MulticastManager bağlantıları
+    connect(multicastManager, &MulticastManager::audioReceived, this, &MainWindow::onAudioReceived);
+    connect(multicastManager, &MulticastManager::messageReceived, this, &MainWindow::onMessageReceived);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete multicastManager;
-    delete audioCapture;
 }
 
-void MainWindow::onMessageReceived(const QString& message) {
-    ui->messageDisplay->setText(message);
+void MainWindow::onStartButtonClicked()
+{
+    audioCapture->startCapture();
+    ui->startButton->setEnabled(false);
+    ui->stopButton->setEnabled(true);
 }
 
-void MainWindow::onSendButtonClicked() {
-    QString message = ui->messageInput->text();
-    multicastManager->sendMessage(message);
+void MainWindow::onStopButtonClicked()
+{
+    audioCapture->stopCapture();
+    ui->startButton->setEnabled(true);
+    ui->stopButton->setEnabled(false);
 }
 
-void MainWindow::onSaveButtonClicked() {
-    // Proje klasöründe recordings alt klasörü oluştur
-    QDir dir;
-    if (!dir.exists("recordings")) {
-        dir.mkdir("recordings");
+void MainWindow::onSaveRequested()
+{
+    QString fileName = QFileDialog::getSaveFileName(this,
+        tr("Save Audio File"), "",
+        tr("WAV Files (*.wav);;All Files (*)"));
+
+    if (!fileName.isEmpty()) {
+        if (audioCapture->saveToWav(fileName.toUtf8().constData())) {
+            ui->statusBar->showMessage(tr("Audio saved successfully to: %1").arg(fileName));
+        } else {
+            ui->statusBar->showMessage(tr("Failed to save audio file!"));
+        }
     }
+}
 
-    // Dosya adını tarih ve saat ile oluştur
-    QString timestamp = QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss");
-    QString filename = QString("recordings/recording_%1.wav").arg(timestamp);
+void MainWindow::onAudioReceived(std::vector<char> data)
+{
+    // Alınan ses verisini işle
+    qDebug() << "Ses verisi alındı, boyut:" << data.size() << "byte";
 
-    // Ses verisini kaydet
-    if (audioCapture->saveToWav(filename)) {
-        ui->messageDisplay->setText("Ses kaydedildi: " + filename);
-    } else {
-        ui->messageDisplay->setText("Ses kaydedilemedi!");
-    }
+    // TODO: Alınan ses verisini çal
+}
+
+void MainWindow::onMessageReceived(const QString &message)
+{
+    ui->statusBar->showMessage(message);
+
 }

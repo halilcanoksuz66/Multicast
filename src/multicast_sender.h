@@ -1,23 +1,28 @@
-#ifndef MULTICASTSENDER_H
-#define MULTICASTSENDER_H
+#ifndef MULTICAST_SENDER_H
+#define MULTICAST_SENDER_H
 
 #include <QObject>
 #include <asio.hpp>
-#include <QString>
+#include <vector>
+#include <string>
 
 using asio::ip::udp;
 
-class MulticastSender : public QObject {
+class MulticastSender : public QObject
+{
     Q_OBJECT
-
 public:
-    MulticastSender();
-    void sendMessage(const QString &message);
-    void start();
+    explicit MulticastSender(QObject *parent = nullptr);
+    ~MulticastSender();
+
+    void sendAudio(std::vector<char> audioData);
 
 private:
     asio::io_context io_context;
     udp::socket socket;
+    udp::endpoint endpoint;
+    std::string multicast_address;
+    unsigned short multicast_port;
 };
 
-#endif // MULTICASTSENDER_H
+#endif // MULTICAST_SENDER_H

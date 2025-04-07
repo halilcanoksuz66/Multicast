@@ -40,10 +40,12 @@ static constexpr auto qt_meta_stringdata_ZN12AudioCaptureE = QtMocHelpers::strin
     "AudioCapture",
     "saveRequested",
     "",
+    "audioCaptured",
+    "std::vector<char>",
+    "data",
     "startCapture",
     "stopCapture",
     "getCapturedData",
-    "std::vector<char>",
     "saveToWav",
     "filename"
 );
@@ -57,30 +59,32 @@ Q_CONSTINIT static const uint qt_meta_data_ZN12AudioCaptureE[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-       5,   14, // methods
+       6,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       1,       // signalCount
+       2,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,   44,    2, 0x06,    1 /* Public */,
+       1,    0,   50,    2, 0x06,    1 /* Public */,
+       3,    1,   51,    2, 0x06,    2 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       3,    0,   45,    2, 0x0a,    2 /* Public */,
-       4,    0,   46,    2, 0x0a,    3 /* Public */,
-       5,    0,   47,    2, 0x0a,    4 /* Public */,
-       7,    1,   48,    2, 0x0a,    5 /* Public */,
+       6,    0,   54,    2, 0x0a,    4 /* Public */,
+       7,    0,   55,    2, 0x0a,    5 /* Public */,
+       8,    0,   56,    2, 0x0a,    6 /* Public */,
+       9,    1,   57,    2, 0x0a,    7 /* Public */,
 
  // signals: parameters
     QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 4,    5,
 
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void,
-    0x80000000 | 6,
-    QMetaType::Bool, QMetaType::QString,    8,
+    0x80000000 | 4,
+    QMetaType::Bool, QMetaType::QString,   10,
 
        0        // eod
 };
@@ -96,6 +100,9 @@ Q_CONSTINIT const QMetaObject AudioCapture::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<AudioCapture, std::true_type>,
         // method 'saveRequested'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'audioCaptured'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<std::vector<char>, std::false_type>,
         // method 'startCapture'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'stopCapture'
@@ -115,11 +122,12 @@ void AudioCapture::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
         case 0: _t->saveRequested(); break;
-        case 1: _t->startCapture(); break;
-        case 2: _t->stopCapture(); break;
-        case 3: { std::vector<char> _r = _t->getCapturedData();
+        case 1: _t->audioCaptured((*reinterpret_cast< std::add_pointer_t<std::vector<char>>>(_a[1]))); break;
+        case 2: _t->startCapture(); break;
+        case 3: _t->stopCapture(); break;
+        case 4: { std::vector<char> _r = _t->getCapturedData();
             if (_a[0]) *reinterpret_cast< std::vector<char>*>(_a[0]) = std::move(_r); }  break;
-        case 4: { bool _r = _t->saveToWav((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])));
+        case 5: { bool _r = _t->saveToWav((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
         default: ;
         }
@@ -130,6 +138,13 @@ void AudioCapture::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
             using _q_method_type = void (AudioCapture::*)();
             if (_q_method_type _q_method = &AudioCapture::saveRequested; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
                 *result = 0;
+                return;
+            }
+        }
+        {
+            using _q_method_type = void (AudioCapture::*)(std::vector<char> );
+            if (_q_method_type _q_method = &AudioCapture::audioCaptured; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
+                *result = 1;
                 return;
             }
         }
@@ -155,14 +170,14 @@ int AudioCapture::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 5)
+        if (_id < 6)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 5;
+        _id -= 6;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 5)
+        if (_id < 6)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 5;
+        _id -= 6;
     }
     return _id;
 }
@@ -171,5 +186,12 @@ int AudioCapture::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 void AudioCapture::saveRequested()
 {
     QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
+}
+
+// SIGNAL 1
+void AudioCapture::audioCaptured(std::vector<char> _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 1, _a);
 }
 QT_WARNING_POP

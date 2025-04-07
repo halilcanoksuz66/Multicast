@@ -2,8 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "multicast_manager.h"
+#include <QFileDialog>
 #include "audiocapture.h"
+#include "multicast_manager.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -20,14 +21,16 @@ public:
     ~MainWindow();
 
 private slots:
-    void onMessageReceived(const QString& message);
-    void onSendButtonClicked();
-    void onSaveButtonClicked();
+    void onStartButtonClicked();
+    void onStopButtonClicked();
+    void onSaveRequested();
+    void onAudioReceived(std::vector<char> data);
+    void onMessageReceived(const QString &message);
 
 private:
     Ui::MainWindow *ui;
-    MulticastManager *multicastManager;
     AudioCapture *audioCapture;
+    MulticastManager *multicastManager;
 };
 
 #endif // MAINWINDOW_H

@@ -13,11 +13,14 @@ class MulticastManager : public QObject
 public:
     explicit MulticastManager(QObject *parent = nullptr);
     ~MulticastManager();
-
-    void sendMessage(const QString& message);
+    void sendAudio(std::vector<char> capturedData);
 
 signals:
-    void messageReceived(const QString& message);
+    void messageReceived(const QString &message);
+    void audioReceived(std::vector<char> data);
+
+public slots:
+    void onAudioCaptured(std::vector<char> data);
 
 private:
     MulticastReceiver *multicastReceiver;
@@ -25,4 +28,4 @@ private:
     QThread *receiverThread;
 };
 
-#endif // MULTICAST_MANAGER_H 
+#endif // MULTICAST_MANAGER_H

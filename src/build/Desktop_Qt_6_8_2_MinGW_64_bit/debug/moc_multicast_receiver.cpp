@@ -38,9 +38,10 @@ struct qt_meta_tag_ZN17MulticastReceiverE_t {};
 #ifdef QT_MOC_HAS_STRINGDATA
 static constexpr auto qt_meta_stringdata_ZN17MulticastReceiverE = QtMocHelpers::stringData(
     "MulticastReceiver",
-    "messageReceived",
+    "audioReceived",
     "",
-    "message"
+    "std::vector<char>",
+    "data"
 );
 #else  // !QT_MOC_HAS_STRINGDATA
 #error "qtmochelpers.h not found or too old."
@@ -63,7 +64,7 @@ Q_CONSTINIT static const uint qt_meta_data_ZN17MulticastReceiverE[] = {
        1,    1,   20,    2, 0x06,    1 /* Public */,
 
  // signals: parameters
-    QMetaType::Void, QMetaType::QString,    3,
+    QMetaType::Void, 0x80000000 | 3,    4,
 
        0        // eod
 };
@@ -77,9 +78,9 @@ Q_CONSTINIT const QMetaObject MulticastReceiver::staticMetaObject = { {
     qt_incomplete_metaTypeArray<qt_meta_tag_ZN17MulticastReceiverE_t,
         // Q_OBJECT / Q_GADGET
         QtPrivate::TypeAndForceComplete<MulticastReceiver, std::true_type>,
-        // method 'messageReceived'
+        // method 'audioReceived'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<const QString &, std::false_type>
+        QtPrivate::TypeAndForceComplete<std::vector<char>, std::false_type>
     >,
     nullptr
 } };
@@ -89,15 +90,15 @@ void MulticastReceiver::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
     auto *_t = static_cast<MulticastReceiver *>(_o);
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: _t->messageReceived((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 0: _t->audioReceived((*reinterpret_cast< std::add_pointer_t<std::vector<char>>>(_a[1]))); break;
         default: ;
         }
     }
     if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _q_method_type = void (MulticastReceiver::*)(const QString & );
-            if (_q_method_type _q_method = &MulticastReceiver::messageReceived; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
+            using _q_method_type = void (MulticastReceiver::*)(std::vector<char> );
+            if (_q_method_type _q_method = &MulticastReceiver::audioReceived; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
                 *result = 0;
                 return;
             }
@@ -137,7 +138,7 @@ int MulticastReceiver::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void MulticastReceiver::messageReceived(const QString & _t1)
+void MulticastReceiver::audioReceived(std::vector<char> _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
