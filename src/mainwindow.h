@@ -2,37 +2,68 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QFileDialog>
-#include "audiocapture.h"
-#include "multicast_manager.h"
-#include "audio_codec.h"
+#include <QListWidget>
+#include <QStatusBar>
+#include <QComboBox>
+#include <QPushButton>
 
-QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
-}
-QT_END_NAMESPACE
+#include "audiomanager.h"
+#include "codecmanager.h"
+#include "networkmanager.h"
+#include "settingsmanager.h"
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
 private slots:
+    // UI event handlers
     void onStartButtonClicked();
     void onStopButtonClicked();
-    void onSaveRequested();
-    void onAudioReceived(std::vector<char> data);
-    void onMessageReceived(const QString &message);
+    void onMuteButtonToggled(bool checked);
+    void onBroadcastAddressChanged(const QString &address);
+    void onListenAddressesChanged();
+    void onInputDeviceChanged(int index);
+    void onOutputDeviceChanged(int index);
+
+    // Error handlers
+    void handleAudioError(const QString &error);
+    void handleCodecError(const QString &error);
+    void handleNetworkError(const QString &error);
 
 private:
-    Ui::MainWindow *ui;
-    AudioCapture *audioCapture;
-    MulticastManager *multicastManager;
-    AudioCodec *audioCodec;
+    // UI setup methods
+    void setupUi();
+    void setupConnections();
+    void populateDeviceLists();
+    void populateMulticastAddresses();
+    void loadSettings();
+    void saveSettings();
+
+    // Status updates
+    void updateStatusBar(const QString &message);
+
+    // UI components
+    QComboBox *comboBoxInputDevice;
+    QComboBox *comboBoxOutputDevice;
+    QPushButton *pushButtonMute;
+    QComboBox *comboBoxBroadcast;
+    QListWidget *listWidgetListen;
+    QPushButton *pushButtonStart;
+    QPushButton *pushButtonStop;
+
+    // Application components
+    AudioManager *audioManager;
+    CodecManager *codecManager;
+    NetworkManager *networkManager;
+    SettingsManager *settingsManager;
+
+    // Application state
+    bool isRunning;
 };
 
 #endif // MAINWINDOW_H
