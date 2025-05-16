@@ -125,18 +125,9 @@ doc.appendChild(root);
 // QFile ile yazılır
 ```
 
----
-
 ## 📸 Ekran Görüntüsü
-
-> (Buraya GUI ekran görüntüsü eklenebilir - placeholder)
-
----
-
-## 📄 Lisans
-
-MIT Lisansı (veya senin tercih ettiğin bir lisans eklenebilir).
-
----
-
-<p align="center">💡 Herkesin konuştuğu yerde sen dinlenmeyi tercih et; sesin anlamı taşıdığı yerde bu projeyi kullan.</p>
+<p align="center">
+  <img src="src/images/1.png" alt="Image1" width="80%"/>
+  
+  <img src="src/images/2.png" alt="Image2" width="80%"/>
+</p>
