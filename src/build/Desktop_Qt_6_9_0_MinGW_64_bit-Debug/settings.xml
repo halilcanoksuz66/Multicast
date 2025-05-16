@@ -1,0 +1,17 @@
+<settings>
+    <broadcastAddress>239.255.0.10</broadcastAddress>
+    <listenAddresses>
+        <address>239.255.0.2</address>
+        <address>239.255.0.3</address>
+    </listenAddresses>
+    <inputDevice>0</inputDevice>
+    <outputDevice>0</outputDevice>
+    <bitrate>64000</bitrate>
+    <samplerate>48000</samplerate>
+    <inputChannels>2</inputChannels>
+    <outputChannels>2</outputChannels>
+    <channels>2</channels>
+    <microphoneMuted>false</microphoneMuted>
+    <frameSize>480</frameSize>
+    <volume>1.000000</volume>
+</settings>

@@ -7,12 +7,6 @@
 
 ---
 
-## 📸 Ekran Görüntüsü
-
-> (Buraya GUI ekran görüntüsü eklenebilir - placeholder)
-
----
-
 ## ✨ Özellikler
 
 - 🎧 Gerçek zamanlı sesli iletişim (low-latency)
@@ -20,7 +14,8 @@
 - 📡 Multicast UDP yayın desteği
 - 🧠 Jitter Buffer ile gecikme önleyici algoritma
 - 🔊 Opus codec ile yüksek kaliteli ses sıkıştırma
-- 📜 Basit ve özelleştirilebilir log sistemi
+- 📜 XML yapılandırma dosyası ile kalıcı ayarlar
+- 🗂️ Basit ve özelleştirilebilir log sistemi
 
 ---
 
@@ -33,6 +28,27 @@
 | `PortAudio`   | Cihazdan gerçek zamanlı ses alımı         |
 | `Opus Codec`  | Ses sıkıştırma ve codec yönetimi         |
 | `ASIO`        | Düşük gecikmeli soket haberleşmesi       |
+| `Qt XML`      | Yapılandırma dosyası okuma/yazma işlemleri|
+
+---
+
+## 🧾 XML Ayar Sistemi
+
+Uygulama, kullanıcı ayarlarını bir XML dosyasına kaydeder ve açılışta bu dosyayı okuyarak GUI bileşenlerini otomatik olarak günceller.
+
+### Örnek XML:
+```xml
+<Settings>
+    <MulticastAddress>239.255.0.1</MulticastAddress>
+    <Port>12345</Port>
+    <Volume>85</Volume>
+</Settings>
+```
+
+### Kullanım:
+
+- Uygulama kapanırken mevcut GUI ayarları XML'e yazılır.
+- Açılışta XML'den ayarlar okunur ve `QLineEdit`, `QSlider`, `QComboBox` gibi öğeler bu değerlere göre güncellenir.
 
 ---
 
@@ -65,9 +81,11 @@ LIBS += -lportaudio -lopus -lwinmm -lole32 -lws2_32
 ## 🎮 Kullanım Senaryosu
 
 1. Uygulama başlatılır.
-2. Gönderici multicast adresine ses verisi yollar.
-3. Alıcı, bu adresi dinleyerek sesi çözümler.
-4. GUI üzerinden ses başlat/durdur, IP ayarı gibi işlemler yapılır.
+2. XML dosyasından ayarlar GUI'ye yüklenir.
+3. Gönderici multicast adresine ses verisi yollar.
+4. Alıcı, bu adresi dinleyerek sesi çözümler.
+5. GUI üzerinden ses başlat/durdur, IP ayarı gibi işlemler yapılır.
+6. Kapatırken mevcut ayarlar XML'e kaydedilir.
 
 ---
 
@@ -81,6 +99,8 @@ Multicast-main/
 │   ├── codecmanager.*     # Opus ile codec işlemleri
 │   ├── debuglogger.*      # Log sistemi
 │   ├── JitterBuffer.h     # Gecikme önleyici buffer
+│   ├── settings.xml       # XML yapılandırma dosyası
+│   ├── xmlhandler.*       # Qt ile XML işlemleri
 │   ├── mainwindow.*       # Qt GUI dosyaları
 │   ├── main.cpp           # Uygulama girişi
 │   └── basitmulticast.pro # Qt Proje Dosyası
@@ -96,6 +116,27 @@ int encoded_bytes = opus_encode(encoder, input_buffer, FRAME_SIZE, output_buffer
 
 // Multicast gönderimi
 socket.send_to(boost::asio::buffer(output_buffer, encoded_bytes), multicast_endpoint);
+
+// XML kaydı (Qt ile)
+QDomDocument doc;
+QDomElement root = doc.createElement("Settings");
+root.appendChild(createTextNode(doc, "MulticastAddress", ip));
+doc.appendChild(root);
+// QFile ile yazılır
 ```
 
 ---
+
+## 📸 Ekran Görüntüsü
+
+> (Buraya GUI ekran görüntüsü eklenebilir - placeholder)
+
+---
+
+## 📄 Lisans
+
+MIT Lisansı (veya senin tercih ettiğin bir lisans eklenebilir).
+
+---
+
+<p align="center">💡 Herkesin konuştuğu yerde sen dinlenmeyi tercih et; sesin anlamı taşıdığı yerde bu projeyi kullan.</p>

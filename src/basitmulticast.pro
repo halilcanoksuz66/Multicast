@@ -32,16 +32,16 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 
 # ASIO(non-boost)
-INCLUDEPATH += C:/msys64/home/halil/asio/include
+INCLUDEPATH += C:\Users\halil\Documents\Libraries/asio/include
 
 # PortAudio
-INCLUDEPATH += C:/msys64/home/halil/portaudio/include
-DEPENDPATH += C:/msys64/home/halil/portaudio/include
-LIBS += -L"C:/msys64/home/halil/portaudio/build" -lportaudio
+INCLUDEPATH += C:\Users\halil\Documents\Libraries/portaudio/include
+DEPENDPATH += C:\Users\halil\Documents\Libraries/portaudio/include
+LIBS += -L"C:\Users\halil\Documents\Libraries/portaudio/build" -lportaudio
 
 # Opus
-INCLUDEPATH += C:/msys64/home/halil/opus-1.5.2/include
-LIBS += -L"C:/msys64/home/halil/opus-1.5.2/build" -lopus
+INCLUDEPATH += C:\Users\halil\Documents\Libraries/opus-1.5.2/include
+LIBS += -L"C:\Users\halil\Documents\Libraries/opus-1.5.2/build" -lopus
 
 
 DISTFILES +=
